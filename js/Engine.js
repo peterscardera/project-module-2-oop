@@ -16,6 +16,10 @@ class Engine {
         this.enemies = [];
         // We add the background image to the game
         addBackground(this.root);
+        this.score = new Scoreboard();
+        this.hearts = [new Lives(theRoot)];
+        this.counter = 3;
+        this.beam = new Beams(theRoot);
     }
 
     // The gameLoop will run every few milliseconds. It does several things
@@ -23,12 +27,15 @@ class Engine {
     //  - Detects a collision between the player and any enemy
     //  - Removes enemies that are too low from the enemies array
     gameLoop = () => {
+        // this.score.level()
+        this.score.timer()
         // This code is to see how much time, in milliseconds, has elapsed since the last
         // time this method was called.
         // (new Date).getTime() evaluates to the number of milliseconds since January 1st, 1970 at midnight.
         if (this.lastFrame === undefined) this.lastFrame = (new Date).getTime();
         let timeDiff = (new Date).getTime() - this.lastFrame;
         this.lastFrame = (new Date).getTime();
+       
         // We use the number of milliseconds since the last call to gameLoop to update the enemy positions.
         // Furthermore, if any enemy is below the bottom of our game, its destroyed property will be set. (See Enemy.js)
         this.enemies.forEach(enemy => {
@@ -46,19 +53,76 @@ class Engine {
             // We add this enemy to the enemies array 
             const spot = nextEnemySpot(this.enemies);
             this.enemies.push(new Enemy(this.root, spot));
-        }
-        // We check if the player is dead. If he is, we alert the user
-        // and return from the method (Why is the return statement important?)
-        if (this.isPlayerDead()) {
-            window.alert("Game over");
+            
+        }   
+        if (this.isPlayerDead() && this.counter === 3 ) {
+            this.counter -=1
+            console.log(this.counter)
+            document.getElementById("lives1").style.visibility = "hidden"
+            window.alert("2 lives left");
+            setTimeout(this.gameLoop, 20)
             return;
-        }
-        // If the player is not dead, then we put a setTimeout to run the gameLoop in 20 milliseconds
-        setTimeout(this.gameLoop, 20);
-    }
-    // This method is not implemented correctly, which is why
-    // the burger never dies. In your exercises you will fix this method.
+    } else if(this.isPlayerDead() && this.counter === 2 ) {
+            this.counter -=1
+            console.log(this.counter)
+            document.getElementById("lives2").style.visibility = "hidden"
+            window.alert("1 life left");
+            setTimeout(this.gameLoop, 20)
+            return;
+    } else if (this.isPlayerDead() && this.counter === 1){
+            this.counter -=1
+            console.log(this.counter);
+            document.getElementById("lives3").style.visibility = "hidden"
+            window.alert("game over");
+            // setTimeout(this.gameLoop, 20)
+            reset()
+            return;
+    } else {
+            setTimeout(this.gameLoop, 20)
+    }         
+        
+}
+
     isPlayerDead = () => {
-        return false;
+        let isDead = false;
+        this.enemies.forEach(enemy => {    
+        if(enemy.x === this.player.x && enemy.y + ENEMY_HEIGHT >= this.player.y) {
+                isDead = true;
+             }
+        })
+        return isDead;
     }
 }
+
+function reset() {
+    let reset = document.createElement("button");
+    let main = document.querySelector("body");
+    reset.innerHTML = "RESTART!";
+    reset.id = "endGameMsg";
+    reset.classList.add("pressButton")
+    main.appendChild(reset);
+    reset.addEventListener("click",buttonEventHandler)
+}
+
+function buttonEventHandler(event) {
+    colorChanger(event);
+    location.reload();
+
+}
+
+function colorChanger(event) {
+    let pressed = event.target.id;
+    let button = document.getElementById(pressed);
+    button.classList.toggle("clicked");
+}
+
+
+
+// function spaceBar() {
+//     console.log("laser beam")
+//     this.beam.style.visibility = "visible"
+//     this.beam.x = this.x ;
+//     this.beam.y = this.y ;
+//     const audio = new Audio("sounds/laser.wav")
+//     audio.play()
+// }
