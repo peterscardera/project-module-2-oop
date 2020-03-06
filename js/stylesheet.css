@@ -1,0 +1,101 @@
+body {
+    margin: 0px;
+    overflow: hidden;
+}
+
+
+#timer {
+    font-size: 29px;
+    font-family: 'Press Start 2P', cursive;
+    display: inline;
+    color: red;
+    top:20px;
+}
+
+
+#levelUp {
+    font-size: 42px;
+    font-family: 'Press Start 2P', cursive;
+    display: inline;
+    color: red;
+    position: absolute;
+    left:780px;
+    top: 20px;
+    animation: retrocolors 2s infinite;
+}
+
+#lives1, #lives2, #lives3 {
+    position: relative;
+    left: -225px;
+    top: -1230px;
+    animation: pulsate 0.5s ease-in-out infinite both;
+    
+}
+
+button{
+    outline: none;
+    width: 200px;
+    height: 100px;
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
+    color:grey;
+    background-color: lightgray;
+    font-weight: bold;
+    box-shadow: 0 .4em gray; 
+    cursor: pointer;
+    border-radius: 8px;
+    position: absolute;
+    font-size: 1.5rem;
+    top: 35%;
+    left:800px;
+    z-index: 1;
+    
+} 
+.clicked {
+    box-shadow: none;
+    top: 35.8%;
+}
+
+#lase {
+    color:red;
+    font-size: 20px;
+}
+
+@keyframes pulsate {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes retrocolors {
+      0% {
+          color: #003b59;
+      }
+      10% {
+          color:#FFFF00;
+      }
+      25% {
+          color: #FD1C03;
+      }
+      35% {
+          color: #00FF00
+      }
+      55% {
+          color: #0062FF;
+      }
+      65%{
+          color: #FF00CC;
+      }
+      75% {
+          color: #6E0DD0;
+      }
+      100% {
+          color: red;
+      }
+  }
